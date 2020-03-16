@@ -32,6 +32,12 @@ public class ReflectionController {
         return reflection;
     }
 
+    @GetMapping("/{id}")
+    public Reflection find(@PathVariable Integer id) {
+        var reflection =  reflections.find(id);
+        return reflection;
+    }
+
     @PatchMapping("/{id}")
     public Reflection update(@PathVariable Integer id, @RequestBody Reflection reflection) {
         reflection.id = id;
