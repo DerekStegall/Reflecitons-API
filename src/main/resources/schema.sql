@@ -48,6 +48,12 @@ CREATE TABLE IF NOT EXISTS reflections (
 CREATE TABLE IF NOT EXISTS questions (
     id SERIAL PRIMARY KEY,
     prompt TEXT NOT NULL,
-    reflectionId INTEGER REFERENCES reflections(id)
-
+    reflectionId INTEGER NOT NULL REFERENCES reflections(id)
 );
+
+CREATE TABLE IF NOT EXISTS responses (
+    id SERIAL PRIMARY KEY,
+    reflectionId INTEGER NOT NULL REFERENCES reflections(id),
+    userName TEXT NOT NULL,
+    answers TEXT NULL
+)

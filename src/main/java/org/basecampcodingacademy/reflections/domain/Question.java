@@ -1,9 +1,10 @@
 package org.basecampcodingacademy.reflections.domain;
 
 public class Question {
+
     public Integer id;
-    public String prompt;
-    public Integer reflectionId ; // You will have to change this line eventually
+    public String prompt; // You will have to change this line eventually
+    public Integer reflectionId;
 
     public Question() {}
 
@@ -13,3 +14,4 @@ public class Question {
         this.reflectionId = reflectionId;
     }
 }
+

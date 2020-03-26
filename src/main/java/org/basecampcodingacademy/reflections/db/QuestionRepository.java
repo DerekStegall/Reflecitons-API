@@ -2,9 +2,9 @@ package org.basecampcodingacademy.reflections.db;
 
 import org.basecampcodingacademy.reflections.domain.Question;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,16 +20,18 @@ public class QuestionRepository {
     }
 
     public Question create(Question question) {
+        var sql = "INSERT INTO questions (prompt, reflectionId) VALUES (?, ?) RETURNING *";
         return jdbc.queryForObject(
-                "INSERT INTO questions (prompt) VALUES (?) RETURNING id, prompt, reflectionId",
+                sql,
                 this::mapper,
-                question.prompt
+                question.prompt,
+                question.reflectionId
         );
     }
 
-//    public Question find( ) {
+//    public Question find(LocalDate localDate) {
 //        try {
-//            return jdbc.queryForObject("SELECT id, prompt FROM questions WHERE prompt = ? LIMIT 1", this::mapper);
+//            return jdbc.queryForObject("SELECT id, prompt FROM questions WHERE prompt = ? LIMIT 1", this::mapper, localDate);
 //        } catch (EmptyResultDataAccessException ex) {
 //            return null;
 //        }
@@ -41,12 +43,12 @@ public class QuestionRepository {
 
     public Question update(Question question) {
         return jdbc.queryForObject(
-                "UPDATE questions SET prompt = ? WHERE id = ? RETURNING id, prompt, reflectionId",
-                this::mapper, question.prompt, question.id);
+                "UPDATE questions SET prompt = ? WHERE id = ? AND reflectionId = ? RETURNING id, prompt, reflectionId",
+                this::mapper, question.prompt, question.id, question.reflectionId);
     }
 
     public void delete(Integer id) {
-        jdbc.query("DELETE FROM questions WHERE reflectionId = ? RETURNING id, prompt, reflectionId", this::mapper, id);
+        jdbc.query("DELETE FROM questions WHERE id = ? RETURNING id, prompt, reflectionId", this::mapper, id);
     }
 
     private Question mapper(ResultSet resultSet, int i) throws SQLException {
