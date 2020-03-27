@@ -22,7 +22,7 @@ public class ReflectionRepository {
 
     public Reflection create(Reflection reflection) {
         return jdbc.queryForObject(
-                "INSERT INTO reflections (date) VALUES (?) RETURNING id, date, question",
+                "INSERT INTO reflections (date) VALUES (?) RETURNING id, date, questions",
                 this::mapper,
                 reflection.date
         );

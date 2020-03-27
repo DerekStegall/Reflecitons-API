@@ -19,6 +19,14 @@ public class QuestionRepository {
         return jdbc.query("SELECT id, prompt, reflectionId FROM questions", this::mapper);
     }
 
+    public List<Question> forReflection(Integer reflectionId){
+        return jdbc.query(
+                "SELECT * FROM questions WHERE reflectionId = ?",
+                this::mapper,
+                reflectionId
+        );
+    }
+
     public Question create(Question question) {
         var sql = "INSERT INTO questions (prompt, reflectionId) VALUES (?, ?) RETURNING *";
         return jdbc.queryForObject(
