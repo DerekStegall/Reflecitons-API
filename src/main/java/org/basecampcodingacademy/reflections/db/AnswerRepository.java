@@ -21,7 +21,7 @@ public class AnswerRepository {
 
     public Answer create(Answer answer) {
         return jdbc.queryForObject(
-                "INSERT INTO answers (  questionId, responseId, content) VALUES (?, ?, ?) RETURNING id,  responseId, questionId, content",
+                "INSERT INTO answers (  questionId, responseId, content) VALUES (?, ?, ?) RETURNING id,  questionId, responseId, content",
                 this::mapper,
                 answer.questionId,
                 answer.responseId,
@@ -39,19 +39,19 @@ public class AnswerRepository {
 
     public Answer update(Answer answer) {
         return jdbc.queryForObject(
-                "UPDATE answers SET content = ? WHERE id = ? RETURNING id, questionId",
-                this::mapper, answer.questionId, answer.id);
+                "UPDATE answers SET content = ? WHERE id = ? RETURNING id, questionId, responseId, content",
+                this::mapper, answer.content, answer.id);
     }
 
     public void delete(Integer id) {
-        jdbc.query("DELETE FROM answers WHERE id = ? RETURNING id, questionId", this::mapper, id);
+        jdbc.query("DELETE FROM answers WHERE id = ? AND responseId = ? RETURNING id, questionId, responseId", this::mapper, id);
     }
 
     private Answer mapper(ResultSet resultSet, int i) throws SQLException {
         return new Answer(
                 resultSet.getInt("id"),
-                resultSet.getInt("responseId"),
                 resultSet.getInt("questionId"),
+                resultSet.getInt("responseId"),
                 resultSet.getString("content")
         );
     }

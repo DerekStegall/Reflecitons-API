@@ -14,7 +14,7 @@ public class AnswerController {
         @Autowired
         public AnswerRepository answers;
 
-        @GetMapping
+        @GetMapping("/responses/{responseId}/answers")
         public List<Answer> index() {
             return answers.all();
         }
@@ -25,14 +25,14 @@ public class AnswerController {
             answer.responseId = responseId;
             return answers.create(answer);
         }
-        @PatchMapping("/{id}")
+        @PatchMapping("/responses/{responseId}/answers/{id}")
         public Answer update(@PathVariable Integer responseId, @PathVariable Integer id, @RequestBody Answer answer) {
             answer.id = id;
             answer.responseId = responseId;
             return answers.update(answer);
         }
 
-        @DeleteMapping("/{id}")
+        @DeleteMapping("/responses/{responseId}/answers/{id}")
         @ResponseStatus(HttpStatus.NO_CONTENT)
         public void delete(@PathVariable Integer id) {
             answers.delete(id);
